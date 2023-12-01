@@ -3,22 +3,24 @@
 
 MultipleShortestPathResults::MultipleShortestPathResults(long n, long double avgTime, long double std,
                                                          double successRate) : n(n), avgTime(avgTime), std(std),
-                                                                               successRate(successRate) {}
+                                                                               successRate(successRate) {
+}
 
 std::string MultipleShortestPathResults::toString() {
     std::string x;
     x.append("Ilosc wierzcholkow: ")
-        .append(std::to_string(n))
-        .append("\tSredni czas: ")
-        .append(std::to_string(avgTime / 1000000))
-        .append("\tOdchylenie standardowe: ")
-        .append(std::to_string(std / 1000000))
-        .append("\tSukcesow: ")
-        .append(std::to_string(successRate));
+            .append(std::to_string(n))
+            .append("\tSredni czas: ")
+            .append(std::to_string(avgTime / 1000000))
+            .append("\tOdchylenie standardowe: ")
+            .append(std::to_string(std / 1000000))
+            .append("\tSukcesow: ")
+            .append(std::to_string(successRate));
     return x;
 }
 
-MultipleShortestPathResults *MultipleShortestPathResults::createFromShortestPathResults(int n, ShortestPathResults **results) {
+MultipleShortestPathResults* MultipleShortestPathResults::createFromShortestPathResults(
+    int n, ShortestPathResults** results) {
     long double avg = PeaUtils::calculateAvgTime(n, results);
     long double std = PeaUtils::calculateStandardDeviation(n, results, avg);
     double successRate = PeaUtils::calculateSuccessRate(n, results);
@@ -33,7 +35,7 @@ long double MultipleShortestPathResults::getAvgTime() const {
     return avgTime;
 }
 
-long  MultipleShortestPathResults::getN() const {
+long MultipleShortestPathResults::getN() const {
     return n;
 }
 

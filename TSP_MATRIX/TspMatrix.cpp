@@ -4,7 +4,7 @@ int TspMatrix::getN() const {
     return n;
 }
 
-int **TspMatrix::getMatrices() const {
+int** TspMatrix::getMatrices() const {
     return matrix;
 }
 
@@ -15,12 +15,12 @@ TspMatrix::~TspMatrix() {
     delete[] this->matrix;
 }
 
-TspMatrix::TspMatrix(int n, int **matrix) {
+TspMatrix::TspMatrix(int n, int** matrix) {
     this->n = n;
     this->matrix = matrix;
 }
 
-unsigned long long int TspMatrix::calculateCost(const int *path) {
+unsigned long long int TspMatrix::calculateCost(const int* path) {
     int first = path[0];
     int v1 = path[0];
     int v2;
@@ -34,7 +34,7 @@ unsigned long long int TspMatrix::calculateCost(const int *path) {
     return totalCost;
 }
 
-unsigned long long TspMatrix::calculateCostThatExcludeZero(const int *path) {
+unsigned long long TspMatrix::calculateCostThatExcludeZero(const int* path) {
     unsigned long long totalCost = matrix[0][path[0]];
     totalCost += matrix[path[n - 2]][0];
     int v1 = path[0];

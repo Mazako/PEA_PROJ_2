@@ -33,7 +33,7 @@ TspMatrix *PeaUtils::generateRandomTSPInstance(int n) {
     return new TspMatrix(n, matrix);
 }
 
-std::string PeaUtils::matrixToString(TspMatrix *tspMatrix) {
+std::string PeaUtils::matrixToString(const TspMatrix *tspMatrix) {
     std::string str;
     for (int i = 0; i < tspMatrix->getN(); i++) {
         str.append(arrayToString(tspMatrix->getN(), tspMatrix->getMatrices()[i]));
@@ -44,8 +44,8 @@ std::string PeaUtils::matrixToString(TspMatrix *tspMatrix) {
     return str;
 }
 
-int *PeaUtils::copyArray(int n, const int *array) {
-    int *newArr = new int[n];
+int *PeaUtils::copyArray(const int n, const int *array) {
+    int* newArr = new int[n];
     for (int i = 0; i < n; i++) {
         newArr[i] = array[i];
     }

@@ -1,8 +1,6 @@
 #ifndef PEA_PROJ_1_TSPMATRIX_H
 #define PEA_PROJ_1_TSPMATRIX_H
 
-#include <vector>
-
 class TspMatrix {
     int n;
     int** matrix;

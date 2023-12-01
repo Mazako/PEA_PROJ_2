@@ -1,5 +1,7 @@
 #include "RandomTspMatrixSet.h"
 
+#include "PeaUtils.h"
+
 RandomTspMatrixSet::RandomTspMatrixSet(int n, int matrixSize) {
     this->n = n;
     this->matrixSize = matrixSize;
@@ -17,7 +19,7 @@ RandomTspMatrixSet::~RandomTspMatrixSet() {
     delete[] matrices;
 }
 
-TspMatrix **RandomTspMatrixSet::getMatrices() const {
+TspMatrix** RandomTspMatrixSet::getMatrices() const {
     return matrices;
 }
 

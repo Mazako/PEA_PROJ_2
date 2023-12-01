@@ -3,12 +3,14 @@
 
 #include <string>
 #include "ShortestPathResults.h"
+
 class MultipleShortestPathResults {
 private:
     long n;
     long double avgTime;
     long double std;
     double successRate;
+
 public:
     MultipleShortestPathResults(long n, long double avgTime, long double std, double successRate);
 
@@ -22,7 +24,7 @@ public:
 
     std::string toString();
 
-    static MultipleShortestPathResults* createFromShortestPathResults(int n, ShortestPathResults **results);
+    static MultipleShortestPathResults* createFromShortestPathResults(int n, ShortestPathResults** results);
 };
 
 
