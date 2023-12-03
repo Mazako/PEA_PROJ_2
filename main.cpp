@@ -1,8 +1,13 @@
 #include <iostream>
 
 #include "PeaUtils.h"
+#include "GREEDY_ALGORITHM/GreedyAlgorithm.h"
+#include "NEIGHBOURHOOD_CREATOR/NeighbourhoodCreator.h"
 
+using namespace std;
 int main() {
-    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv55.atsp");
-    std::cout<< matrix->getMatrices()[1][0];
-}
+    int arr[] = {1, 2, 3, 4, 5, 6};
+    NeighbourhoodCreator::twoOptSwap(6, arr);
+    // while (true) {
+        // cout << PeaUtils::randomInt(4) << endl;
+    }

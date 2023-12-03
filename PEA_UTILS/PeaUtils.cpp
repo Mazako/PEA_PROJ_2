@@ -10,9 +10,13 @@ void PeaUtils::swap(int i, int j, int* array) {
 }
 
 int PeaUtils::randomInt() {
+   return randomInt(INT32_MAX);
+}
+
+int PeaUtils::randomInt(int range) {
     std::random_device device;
     std::mt19937 rng(device());
-    std::uniform_int_distribution<> distribution(0, INT32_MAX);
+    std::uniform_int_distribution<> distribution(0, range);
     return distribution(rng);
 }
 

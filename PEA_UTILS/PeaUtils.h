@@ -31,6 +31,8 @@ public:
 
     static int randomInt();
 
+    static int randomInt(int range);
+
     static TspMatrix* generateRandomTSPInstance(int n);
 
     static std::string matrixToString(const TspMatrix* tspMatrix);
