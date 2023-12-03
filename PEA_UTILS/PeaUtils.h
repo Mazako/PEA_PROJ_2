@@ -39,6 +39,8 @@ public:
 
     static TspMatrix* readMatrixFromFile(const std::string& filename);
 
+    static TspMatrix* readMatrixFromAtspFile(const std::string& filename);
+
     static int factorial(int n);
 
     static long double calculateAvgTime(int resultCount, ShortestPathResults** results);

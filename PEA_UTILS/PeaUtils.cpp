@@ -1,6 +1,9 @@
 #include "PeaUtils.h"
 
-void PeaUtils::swap(int i, int j, int *array) {
+#include <iostream>
+#include <sstream>
+
+void PeaUtils::swap(int i, int j, int* array) {
     int tmp = array[j];
     array[j] = array[i];
     array[i] = tmp;
@@ -13,8 +16,8 @@ int PeaUtils::randomInt() {
     return distribution(rng);
 }
 
-TspMatrix *PeaUtils::generateRandomTSPInstance(int n) {
-    int **matrix = new int *[n];
+TspMatrix* PeaUtils::generateRandomTSPInstance(int n) {
+    int** matrix = new int *[n];
     for (int i = 0; i < n; i++) {
         matrix[i] = new int[n];
         for (int j = 0; j < n; j++) {
@@ -33,7 +36,7 @@ TspMatrix *PeaUtils::generateRandomTSPInstance(int n) {
     return new TspMatrix(n, matrix);
 }
 
-std::string PeaUtils::matrixToString(const TspMatrix *tspMatrix) {
+std::string PeaUtils::matrixToString(const TspMatrix* tspMatrix) {
     std::string str;
     for (int i = 0; i < tspMatrix->getN(); i++) {
         str.append(arrayToString(tspMatrix->getN(), tspMatrix->getMatrices()[i]));
@@ -44,7 +47,7 @@ std::string PeaUtils::matrixToString(const TspMatrix *tspMatrix) {
     return str;
 }
 
-int *PeaUtils::copyArray(const int n, const int *array) {
+int* PeaUtils::copyArray(const int n, const int* array) {
     int* newArr = new int[n];
     for (int i = 0; i < n; i++) {
         newArr[i] = array[i];
@@ -52,23 +55,23 @@ int *PeaUtils::copyArray(const int n, const int *array) {
     return newArr;
 }
 
-int *PeaUtils::createArrayFromZeroToNMinusOne(int n) {
-    int *arr = new int[n];
+int* PeaUtils::createArrayFromZeroToNMinusOne(int n) {
+    int* arr = new int[n];
     for (int i = 0; i < n; i++) {
         arr[i] = i;
     }
     return arr;
 }
 
-int *PeaUtils::createArrayFromOneToNMinusOne(int n) {
-    int *arr = new int [n - 1];
+int* PeaUtils::createArrayFromOneToNMinusOne(int n) {
+    int* arr = new int [n - 1];
     for (int i = 1; i < n; i++) {
         arr[i - 1] = i;
     }
     return arr;
 }
 
-TspMatrix *PeaUtils::readMatrixFromFile(const std::string &filename) {
+TspMatrix* PeaUtils::readMatrixFromFile(const std::string& filename) {
     using namespace std;
     string line;
     fstream newFile;
@@ -78,7 +81,7 @@ TspMatrix *PeaUtils::readMatrixFromFile(const std::string &filename) {
     if (count <= 0) {
         throw invalid_argument("Too small length of array");
     }
-    int **matrix = new int *[count];
+    int** matrix = new int *[count];
     for (int i = 0; i < count; i++) {
         matrix[i] = new int[count];
         for (int j = 0; j < count; j++) {
@@ -91,6 +94,50 @@ TspMatrix *PeaUtils::readMatrixFromFile(const std::string &filename) {
     return new TspMatrix(count, matrix);
 }
 
+TspMatrix* PeaUtils::readMatrixFromAtspFile(const std::string& filename) {
+    using namespace std;
+    string line;
+    fstream newFile;
+    newFile.open(filename, ios::in);
+    for (int i = 0; i < 4; i++) {
+        getline(newFile, line);
+    }
+
+    stringstream dimensionStream(line);
+    string dimensionStr;
+    dimensionStream >> dimensionStr;
+    dimensionStream >> dimensionStr;
+    int dimension = stoi(dimensionStr);
+    cout << dimension << endl;
+
+    for (int i = 0; i < 4; i++) {
+        getline(newFile, line);
+    }
+    int** array = new int*[dimension];
+    stringstream rowBuffer(line);
+    string numberBuffer;
+    int i = 0;
+    int j = 0;
+    int counter = 0;
+    array[i] = new int[dimension];
+    while (line != "EOF") {
+        while (rowBuffer >> numberBuffer) {
+            array[i][j] = stoi(numberBuffer);
+            counter++;
+            if (counter % dimension == 0) {
+                i++;
+                j = 0;
+                array[i] = new int[dimension];
+            } else {
+                j++;
+            }
+        }
+        getline(newFile, line);
+        rowBuffer = stringstream(line);
+    }
+    return new TspMatrix(dimension, array);
+}
+
 int PeaUtils::factorial(int n) {
     int result = 1;
     for (int i = 2; i <= n; i++) {
@@ -99,7 +146,7 @@ int PeaUtils::factorial(int n) {
     return result;
 }
 
-std::string PeaUtils::arrayToString(int n, int *arr) {
+std::string PeaUtils::arrayToString(int n, int* arr) {
     std::string str;
     for (int i = 0; i < n; i++) {
         str.append(std::to_string(arr[i]));
@@ -110,7 +157,7 @@ std::string PeaUtils::arrayToString(int n, int *arr) {
     return str;
 }
 
-long double PeaUtils::calculateAvgTime(int resultCount, ShortestPathResults **results) {
+long double PeaUtils::calculateAvgTime(int resultCount, ShortestPathResults** results) {
     long long totalTime = 0.;
     int successCount = 0;
     for (int i = 0; i < resultCount; i++) {
@@ -127,15 +174,15 @@ long double PeaUtils::calculateAvgTime(int resultCount, ShortestPathResults **re
     return (long double) totalTime / successCount;
 }
 
-int **PeaUtils::copyMatrix(int n, int **matrix) {
-    int **newArray = new int *[n];
+int** PeaUtils::copyMatrix(int n, int** matrix) {
+    int** newArray = new int *[n];
     for (int i = 0; i < n; i++) {
         newArray[i] = copyArray(n, matrix[i]);
     }
     return newArray;
 }
 
-int PeaUtils::minimum(int n, const int *array) {
+int PeaUtils::minimum(int n, const int* array) {
     int minimum = array[0];
     if (minimum == -1) {
         minimum = array[1];
@@ -148,7 +195,7 @@ int PeaUtils::minimum(int n, const int *array) {
     return minimum;
 }
 
-int PeaUtils::minimumColumn(int n, int **matrix, int column) {
+int PeaUtils::minimumColumn(int n, int** matrix, int column) {
     int minimum = matrix[0][column];
     if (minimum == -1) {
         minimum = matrix[1][column];
@@ -170,9 +217,9 @@ std::vector<int> PeaUtils::createVectorFromZeroToNMinusOne(int n) {
     return v;
 }
 
-std::vector<int> PeaUtils::subtractVectors(std::vector<int> &v1, std::vector<int> &v2) {
+std::vector<int> PeaUtils::subtractVectors(std::vector<int>& v1, std::vector<int>& v2) {
     std::vector<int> result;
-    for (const auto &item: v1) {
+    for (const auto& item: v1) {
         if (std::find(v2.begin(), v2.end(), item) == v2.end()) {
             result.push_back(item);
         }
@@ -180,7 +227,7 @@ std::vector<int> PeaUtils::subtractVectors(std::vector<int> &v1, std::vector<int
     return result;
 }
 
-long double PeaUtils::calculateStandardDeviation(int resultCount, ShortestPathResults **results, long double avg) {
+long double PeaUtils::calculateStandardDeviation(int resultCount, ShortestPathResults** results, long double avg) {
     long double total = .0;
     for (int i = 0; i < resultCount; i++) {
         total += std::pow(results[i]->getNanoTime() - avg, 2);
@@ -189,7 +236,7 @@ long double PeaUtils::calculateStandardDeviation(int resultCount, ShortestPathRe
     return std::sqrt(total);
 }
 
-long double PeaUtils::calculateSuccessRate(int resultCount, ShortestPathResults **results) {
+long double PeaUtils::calculateSuccessRate(int resultCount, ShortestPathResults** results) {
     int successes = 0;
     for (int i = 0; i < resultCount; i++) {
         if (results[i]->isSuccess()) {

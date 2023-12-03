@@ -1,5 +1,8 @@
 #include <iostream>
 
+#include "PeaUtils.h"
+
 int main() {
-    std::cout << "Hello world!" << std::endl;
+    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv55.atsp");
+    std::cout<< matrix->getMatrices()[1][0];
 }
