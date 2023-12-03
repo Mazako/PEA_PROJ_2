@@ -14,7 +14,7 @@ std::pair<int, int> NeighbourhoodCreator::randomVertices(int n) {
 int* NeighbourhoodCreator::twoOptSwap(int n, int* array) {
     int* newNeighbour = new int[n];
     auto v = randomVertices(n - 1);
-    for (int i = 0; i < v.first; i++) {
+    for (int i = 0; i <= v.first; i++) {
         newNeighbour[i] = array[i];
     }
     for (int i = v.first + 1; i <= v.second; i++) {

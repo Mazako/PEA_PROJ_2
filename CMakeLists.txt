@@ -8,7 +8,8 @@ include_directories(PEA_UTILS
         TSP_MATRIX
         TSP_MATRIX_SET
         SHORTEST_PATH_RESULTS/MULTIPLE_SHORTEST_PATH_MULTIPLE_RESULTS
-        GREEDY_ALGORITHM)
+        GREEDY_ALGORITHM
+        SIMULATED_ANNEALING)
 
 add_executable(PEA_PROJ_2 main.cpp
         PEA_UTILS/PeaUtils.cpp
@@ -25,4 +26,6 @@ add_executable(PEA_PROJ_2 main.cpp
         GREEDY_ALGORITHM/GreedyAlgorithm.h
         NEIGHBOURHOOD_CREATOR/NeighbourhoodCreator.cpp
         NEIGHBOURHOOD_CREATOR/NeighbourhoodCreator.h
+        SIMULATED_ANNEALING/SimulatedAnnealing.cpp
+        SIMULATED_ANNEALING/SimulatedAnnealing.h
 )
