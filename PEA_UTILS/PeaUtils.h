@@ -5,6 +5,7 @@
 #include <random>
 #include <functional>
 #include <fstream>
+#include <chrono>
 #include "TspMatrix.h"
 #include "ShortestPathResults.h"
 
@@ -56,6 +57,23 @@ public:
     static std::vector<int> subtractVectors(std::vector<int>& v1, std::vector<int>& v2);
 
     static double calculateAverage(const std::vector<long long int> &vec);
+
+    static int* generateRandomPath(int N) {
+        std::vector<int> path(N);
+        for (int i = 0; i < N; ++i) {
+            path[i] = i;
+        }
+
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+        shuffle(path.begin(), path.end(), std::default_random_engine(seed));
+
+        int* arr = new int[N];
+        for (int i = 0; i < N; i++) {
+            arr[i] = path[i];
+        }
+        return arr;
+    }
 };
 
 

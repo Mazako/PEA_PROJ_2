@@ -8,6 +8,7 @@ class NeighbourhoodCreator {
     static std::pair<int, int> randomVertices(int n);
 public:
     static int* twoOptSwap(int n, int* array);
+    static int* randomTwoSwap(int n, int* array);
 };
 
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "NeighbourhoodCreator.h"
 
 #include "PeaUtils.h"
@@ -29,6 +30,14 @@ int* NeighbourhoodCreator::twoOptSwap(int n, int* array) {
 
 }
 
+int *NeighbourhoodCreator::randomTwoSwap(int n, int *array) {
+    int* newNeighbour = PeaUtils::copyArray(n, array);
+//    std::cout << PeaUtils::arrayToString(n, newNeighbour) << std::endl;
+    auto v = randomVertices(n - 1);
+//    std::cout << "v1: " << v.first << " v2 " << v.second << std::endl;
+    PeaUtils::swap(v.first, v.second, newNeighbour);
+    return newNeighbour;
+}
 
 
 NeighbourhoodCreator::NeighbourhoodCreator() = default;
