@@ -33,6 +33,8 @@ public:
 
     static int randomInt(int range);
 
+    static double randomFormalDouble();
+
     static TspMatrix* generateRandomTSPInstance(int n);
 
     static std::string matrixToString(const TspMatrix* tspMatrix);
@@ -52,6 +54,8 @@ public:
     static long double calculateSuccessRate(int resultCount, ShortestPathResults** results);
 
     static std::vector<int> subtractVectors(std::vector<int>& v1, std::vector<int>& v2);
+
+    static double calculateAverage(const std::vector<long long int> &vec);
 };
 
 

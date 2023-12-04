@@ -20,11 +20,11 @@ TspMatrix::TspMatrix(int n, int** matrix) {
     this->matrix = matrix;
 }
 
-unsigned long long int TspMatrix::calculateCost(const int* path) {
+long long int TspMatrix::calculateCost(const int* path) {
     int first = path[0];
     int v1 = path[0];
     int v2;
-    unsigned long long int totalCost = 0;
+    long long int totalCost = 0;
     for (int i = 1; i < this->n; i++) {
         v2 = path[i];
         totalCost += matrix[v1][v2];

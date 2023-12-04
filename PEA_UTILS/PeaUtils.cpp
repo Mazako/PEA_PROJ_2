@@ -20,6 +20,13 @@ int PeaUtils::randomInt(int range) {
     return distribution(rng);
 }
 
+double PeaUtils::randomFormalDouble() {
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    std::uniform_real_distribution<> distr(0.0, 1.0);
+    return distr(rng);
+}
+
 TspMatrix* PeaUtils::generateRandomTSPInstance(int n) {
     int** matrix = new int *[n];
     for (int i = 0; i < n; i++) {
@@ -155,7 +162,7 @@ std::string PeaUtils::arrayToString(int n, int* arr) {
     for (int i = 0; i < n; i++) {
         str.append(std::to_string(arr[i]));
         if (i != n - 1) {
-            str.append(" ");
+            str.append(", ");
         }
     }
     return str;
@@ -248,6 +255,16 @@ long double PeaUtils::calculateSuccessRate(int resultCount, ShortestPathResults*
         }
     }
     return (double) successes / resultCount;
+}
+
+double PeaUtils::calculateAverage(const std::vector<long long int> &vec) {
+    if (vec.empty()) return 0.0;
+
+    double sum = 0.0;
+    for (long long num: vec) {
+        sum += num;
+    }
+    return (double) sum / vec.size();
 }
 
 PeaUtils::PeaUtils() = default;

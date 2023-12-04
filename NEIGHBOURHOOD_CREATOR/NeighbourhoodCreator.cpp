@@ -17,14 +17,18 @@ int* NeighbourhoodCreator::twoOptSwap(int n, int* array) {
     for (int i = 0; i <= v.first; i++) {
         newNeighbour[i] = array[i];
     }
-    for (int i = v.first + 1; i <= v.second; i++) {
-        newNeighbour[i] = array[v.second - i];
+    for (int i = 0; i <= v.second - v.first; i++) {
+        newNeighbour[v.first + 1 + i] = array[v.second - i];
     }
 
     for (int i = v.second + 1; i < n; i++) {
         newNeighbour[i] = array[i];
     }
 
-    return array;
+    return newNeighbour;
 
 }
+
+
+
+NeighbourhoodCreator::NeighbourhoodCreator() = default;

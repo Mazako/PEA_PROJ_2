@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.25.2)
 project(PEA_PROJ_2)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -9,7 +9,8 @@ include_directories(PEA_UTILS
         TSP_MATRIX_SET
         SHORTEST_PATH_RESULTS/MULTIPLE_SHORTEST_PATH_MULTIPLE_RESULTS
         GREEDY_ALGORITHM
-        SIMULATED_ANNEALING)
+        SIMULATED_ANNEALING
+        NEIGHBOURHOOD_CREATOR)
 
 add_executable(PEA_PROJ_2 main.cpp
         PEA_UTILS/PeaUtils.cpp

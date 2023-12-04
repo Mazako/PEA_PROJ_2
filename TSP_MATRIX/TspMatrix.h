@@ -14,7 +14,7 @@ public:
 
     int** getMatrices() const;
 
-    unsigned long long int calculateCost(const int* path);
+    long long int calculateCost(const int* path);
 
     unsigned long long int calculateCostThatExcludeZero(const int* path);
 };

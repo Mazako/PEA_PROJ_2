@@ -21,7 +21,7 @@ std::string ShortestPathResults::toString() {
     str.append("\tkoszt: ").append(std::to_string(cost));
     str.append("\tsciezka: ");
     for (int i = 0; i < n; i++) {
-        str.append(std::to_string(path[i])).append(" ");
+        str.append(std::to_string(path[i])).append(", ");
     }
     str.append("\tczas: ").append(std::to_string((double) nanoTime / 1000000)).append(" ms.");
     return str;
