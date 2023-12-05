@@ -24,7 +24,7 @@ ShortestPathResults* GreedyAlgorithm::solve(TspMatrix* matrix) {
     int last = path[matrix->getN() - 1];
     totalCost += matrix->getMatrices()[last][0];
     delete[] visited;
-    return new ShortestPathResults(totalCost, matrix->getN(), path, 0);
+    return new ShortestPathResults(totalCost, matrix->getN(), path, 0, false);
 
 }
 

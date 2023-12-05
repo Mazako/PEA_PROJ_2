@@ -3,24 +3,20 @@
 #include <string>
 
 class ShortestPathResults {
-    bool success;
+    bool noTimeCause;
     unsigned long long int cost;
     int* path;
     int n;
     long long nanoTime;
 
-    ShortestPathResults(bool success);
-
 public:
-    ShortestPathResults(unsigned long long int cost, int n, int* path, long long nanoTime);
-
-    static ShortestPathResults* createFailure();
+    ShortestPathResults(unsigned long long int cost, int n, int* path, long long nanoTime, bool noTimeCause);
 
     ~ShortestPathResults();
 
     std::string toString();
 
-    bool isSuccess() const;
+    bool isNoTimeCause() const;
 
     unsigned long long int getCost() const;
 

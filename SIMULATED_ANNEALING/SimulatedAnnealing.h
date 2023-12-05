@@ -7,10 +7,11 @@
 class SimulatedAnnealing {
     SimulatedAnnealing();
     static int* generateRandomPath(int n);
-    static double initialTemperature(int n, int *path, long long int cost, TspMatrix *matrix);
+    static double initialTemperature(int n, int *path, long long int cost, TspMatrix *matrix, double tau);
     static bool isAccepted(double delta, double temparature);
 public:
-    static ShortestPathResults* solve(TspMatrix* matrix);
+    static ShortestPathResults *
+    solve(TspMatrix *matrix, int limitInMinutes, double tau, double innerLoopFactor, double coolingFactor);
 
 };
 

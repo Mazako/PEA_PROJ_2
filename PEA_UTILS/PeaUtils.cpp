@@ -119,7 +119,6 @@ TspMatrix* PeaUtils::readMatrixFromAtspFile(const std::string& filename) {
     dimensionStream >> dimensionStr;
     dimensionStream >> dimensionStr;
     int dimension = stoi(dimensionStr);
-    cout << dimension << endl;
 
     for (int i = 0; i < 4; i++) {
         getline(newFile, line);
@@ -172,7 +171,7 @@ long double PeaUtils::calculateAvgTime(int resultCount, ShortestPathResults** re
     long long totalTime = 0.;
     int successCount = 0;
     for (int i = 0; i < resultCount; i++) {
-        if (results[i]->isSuccess()) {
+        if (results[i]->isNoTimeCause()) {
             successCount++;
             totalTime += results[i]->getNanoTime();
         }
@@ -250,7 +249,7 @@ long double PeaUtils::calculateStandardDeviation(int resultCount, ShortestPathRe
 long double PeaUtils::calculateSuccessRate(int resultCount, ShortestPathResults** results) {
     int successes = 0;
     for (int i = 0; i < resultCount; i++) {
-        if (results[i]->isSuccess()) {
+        if (results[i]->isNoTimeCause()) {
             successes++;
         }
     }

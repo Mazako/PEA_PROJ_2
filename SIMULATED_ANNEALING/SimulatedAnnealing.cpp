@@ -3,32 +3,37 @@
 #include "NeighbourhoodCreator.h"
 #include "GreedyAlgorithm.h"
 #include <iostream>
+#include <chrono>
 
 using std::cout;
 using std::endl;
 
 SimulatedAnnealing::SimulatedAnnealing() = default;
 
-ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix) {
+ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMinutes, double tau,
+                                               double innerLoopFactor, double coolingFactor) {
+    cout << "Limit: " << limitInMinutes << ", tau: " << tau << ", loopFactor: " << innerLoopFactor << ", coolingFactor: " << coolingFactor << endl;
     int n = matrix->getN();
-    auto route = GreedyAlgorithm::solve(matrix)->getPath();
+    auto route = PeaUtils::generateRandomPath(n);
     auto cost = matrix->calculateCost(route);
-
+    cout << "GREEDY COST: " << GreedyAlgorithm::solve(matrix)->getCost();
     int* newRoute = PeaUtils::copyArray(n, route);
     long long newCost = cost;
 
-    auto temperature = initialTemperature(n, route, cost, matrix);
 
+    auto temperature = initialTemperature(n, route, cost, matrix, tau);
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     std::cout << "T: " << temperature << std::endl;
-    int maxInnerLoopRuns = n * 30;
-    while (temperature > 0.000001) {
+    int maxInnerLoopRuns = (n * (n - 1)) / 2;
+    maxInnerLoopRuns *= innerLoopFactor;
+    while (temperature > 0.0000001) {
         int totalRuns = 0;
         int accepted = 0;
         while (totalRuns < maxInnerLoopRuns) {
-            auto neighbour = NeighbourhoodCreator::twoOptSwap(n, newRoute);
+            auto neighbour = NeighbourhoodCreator::randomTwoSwap(n, newRoute);
             auto neighbourCost = matrix->calculateCost(neighbour);
-//            cout << "CURRENT: " << newCost << " NEIGHBOUR << " << neighbourCost << endl;
             long long delta = neighbourCost - newCost;
             if (delta <= 0) {
                 delete newRoute;
@@ -39,7 +44,8 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix) {
                     route = PeaUtils::copyArray(n, newRoute);
                     cost = newCost;
                     accepted++;
-                    cout << "HIT" << endl;
+//                    std::cout << "NAJLEPSZY KOSZT: " << cost << " TEMPERATURA: " << temperature << std::endl;
+
                 }
             } else if (isAccepted((double) delta, temperature)) {
                 delete newRoute;
@@ -49,15 +55,19 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix) {
             delete neighbour;
             totalRuns++;
         }
-//        std::cout << "NAJLEPSZY KOSZT: " << cost << " TEMPERATURA: " << temperature << std::endl;
-        temperature *= 0.95;
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() > limitInMinutes) {
+            cout << "TIME LIMIT EXCEEDED" << endl;
+            return new ShortestPathResults(cost, n, route, 0, true);
+        }
+        temperature *= coolingFactor;
     }
 
-    return new ShortestPathResults(cost, n, route, 0);
+    return new ShortestPathResults(cost, n, route, 0, false);
 }
 
 
-double SimulatedAnnealing::initialTemperature(int n, int *path, long long int cost, TspMatrix *matrix) {
+double SimulatedAnnealing::initialTemperature(int n, int *path, long long int cost, TspMatrix *matrix, double tau) {
     std::vector<long long> costs;
     for (int i = 0; i < 100; i++) {
         auto neighbour = NeighbourhoodCreator::randomTwoSwap(n, path);
@@ -65,7 +75,7 @@ double SimulatedAnnealing::initialTemperature(int n, int *path, long long int co
         costs.push_back(std::abs(neighbourCost - cost));
     }
     double avg = PeaUtils::calculateAverage(costs);
-    return std::abs(-avg / std::log(0.5));
+    return std::abs(avg / std::log(tau));
 
 }
 

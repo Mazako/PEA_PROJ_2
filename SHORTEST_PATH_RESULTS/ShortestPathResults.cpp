@@ -1,8 +1,8 @@
 #include "ShortestPathResults.h"
 
 ShortestPathResults::ShortestPathResults(unsigned long long int cost, int n, int* path,
-                                         long long nanoTime) : cost(cost), path(path), n(n), nanoTime(nanoTime),
-                                                               success(true) {
+                                         long long nanoTime, bool noTimeCause) : cost(cost), path(path), n(n), nanoTime(nanoTime),
+                                                               noTimeCause(noTimeCause) {
 }
 
 ShortestPathResults::~ShortestPathResults() {
@@ -10,12 +10,6 @@ ShortestPathResults::~ShortestPathResults() {
 }
 
 std::string ShortestPathResults::toString() {
-    if (!success) {
-        std::string str;
-        str.append("Ilosc wierzcholkow: ").append(std::to_string(n));
-        str.append("\t PORAZKA");
-        return str;
-    }
     std::string str;
     str.append("Ilosc wierzcholkow: ").append(std::to_string(n));
     str.append("\tkoszt: ").append(std::to_string(cost));
@@ -27,20 +21,8 @@ std::string ShortestPathResults::toString() {
     return str;
 }
 
-ShortestPathResults* ShortestPathResults::createFailure() {
-    return new ShortestPathResults(false);
-}
-
-ShortestPathResults::ShortestPathResults(bool success) {
-    this->nanoTime = 0;
-    this->n = 0;
-    this->cost = 0;
-    this->success = false;
-    this->path = nullptr;
-}
-
-bool ShortestPathResults::isSuccess() const {
-    return success;
+bool ShortestPathResults::isNoTimeCause() const {
+    return noTimeCause;
 }
 
 unsigned long long int ShortestPathResults::getCost() const {
