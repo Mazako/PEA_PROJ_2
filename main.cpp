@@ -4,6 +4,7 @@
 #include "GreedyAlgorithm.h"
 #include "NeighbourhoodCreator.h"
 #include "SimulatedAnnealing.h"
+#include "TabuSearch.h"
 
 using namespace std;
 
@@ -23,6 +24,8 @@ int main(int argc, char *argv[]) {
         stream << result->getCost() << " " << timeCause << endl;
 
     }
-//    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/rbg358.atsp");
+    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv55.atsp");
 //    cout << SimulatedAnnealing::solve(matrix, 0, 0.5, 1, 0.999)->toString() << endl;
+    TabuSearch::solve(matrix, 100);
+
 }

@@ -12,7 +12,7 @@ std::pair<int, int> NeighbourhoodCreator::randomVertices(int n) {
     return std::pair<int, int>(std::min(v1, v2), std::max(v1, v2));
 }
 
-int* NeighbourhoodCreator::twoOptSwap(int n, int* array) {
+int* NeighbourhoodCreator::randomTwoOptSwap(int n, int* array) {
     int* newNeighbour = new int[n];
     auto v = randomVertices(n - 1);
     for (int i = 0; i <= v.first; i++) {
@@ -36,6 +36,22 @@ int *NeighbourhoodCreator::randomTwoSwap(int n, int *array) {
     auto v = randomVertices(n - 1);
 //    std::cout << "v1: " << v.first << " v2 " << v.second << std::endl;
     PeaUtils::swap(v.first, v.second, newNeighbour);
+    return newNeighbour;
+}
+
+int * NeighbourhoodCreator::twoOptSwap(int n, int v2, int v1, int *array) {
+    int* newNeighbour = new int[n];
+    for (int i = 0; i <= v1; i++) {
+        newNeighbour[i] = array[i];
+    }
+    for (int i = 0; i <= v2 - v1; i++) {
+        newNeighbour[v1 + 1 + i] = array[v2 - i];
+    }
+
+    for (int i = v1 + 1; i < n; i++) {
+        newNeighbour[i] = array[i];
+    }
+    delete array;
     return newNeighbour;
 }
 

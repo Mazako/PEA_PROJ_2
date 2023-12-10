@@ -10,7 +10,8 @@ include_directories(PEA_UTILS
         SHORTEST_PATH_RESULTS/MULTIPLE_SHORTEST_PATH_MULTIPLE_RESULTS
         GREEDY_ALGORITHM
         SIMULATED_ANNEALING
-        NEIGHBOURHOOD_CREATOR)
+        NEIGHBOURHOOD_CREATOR
+        TABU_SEARCH)
 
 add_executable(PEA_PROJ_2 main.cpp
         PEA_UTILS/PeaUtils.cpp
@@ -29,4 +30,6 @@ add_executable(PEA_PROJ_2 main.cpp
         NEIGHBOURHOOD_CREATOR/NeighbourhoodCreator.h
         SIMULATED_ANNEALING/SimulatedAnnealing.cpp
         SIMULATED_ANNEALING/SimulatedAnnealing.h
+        TABU_SEARCH/TabuSearch.cpp
+        TABU_SEARCH/TabuSearch.h
 )

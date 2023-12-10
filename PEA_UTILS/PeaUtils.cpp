@@ -266,4 +266,15 @@ double PeaUtils::calculateAverage(const std::vector<long long int> &vec) {
     return (double) sum / vec.size();
 }
 
+int **PeaUtils::generateEmptyMatrix(int n) {
+    int** mat = new int*[n];
+    for (int i = 0; i < n; i++) {
+        mat[i] = new int[n];
+        for (int j = 0; j < n; j++) {
+            mat[i][j] = 0;
+        }
+    }
+    return mat;
+}
+
 PeaUtils::PeaUtils() = default;

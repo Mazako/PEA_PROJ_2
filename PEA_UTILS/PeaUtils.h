@@ -58,6 +58,8 @@ public:
 
     static double calculateAverage(const std::vector<long long int> &vec);
 
+    static int** generateEmptyMatrix(int n);
+
     static int* generateRandomPath(int N) {
         std::vector<int> path(N);
         for (int i = 0; i < N; ++i) {
