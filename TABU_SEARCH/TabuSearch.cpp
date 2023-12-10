@@ -2,6 +2,7 @@
 #include "TabuSearch.h"
 #include "PeaUtils.h"
 #include "GreedyAlgorithm.h"
+#include "NeighbourhoodCreator.h"
 
 ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
     int n = matrix->getN();
@@ -16,11 +17,10 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
     long long neighbourCost;
 
     int maxLoops = 1000000000;
-    int maxLoopsWithoutProgress = 100;
+    int maxLoopsWithoutProgress = 500;
     int tabuListSize = 3 * n;
 
     auto tabu = PeaUtils::generateEmptyMatrix(n);
-    auto frequencies = PeaUtils::generateEmptyMatrix(n);
 
     int v1 = 0;
     int v2 = 0;
@@ -28,36 +28,18 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
     int unsatisfiedRuns = 0;
     while (iter < maxLoops) {
         neighbour = PeaUtils::copyArray(n, currentPath);
-        for (int i = 0; i < n - 2; i++) {
+        for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
                 PeaUtils::swap(i, j, neighbour);
                 neighbourCost = matrix->calculateCost(neighbour);
 
-                if (tabu[neighbour[i]][neighbour[j]] <= iter || tabu[neighbour[j]][neighbour[i]] <= iter ||
-                    neighbourCost < bestCost) {
+                if (tabu[i][j] == 0  || tabu[j][i] == 0 || neighbourCost < bestCost) {
                     if (neighbourCost < currentCost) {
                         delete currentPath;
                         currentPath = PeaUtils::copyArray(n, neighbour);
                         currentCost = neighbourCost;
-                        v1 = std::min(neighbour[i], neighbour[j]);
-                        v2 = std::max(neighbour[i], neighbour[j]);
-
-                    }
-                } else {
-                    double penalScore;
-                    if (frequencies[neighbour[i]][neighbour[j]] != 0) {
-                        penalScore = neighbourCost + (10 * frequencies[neighbour[i]][neighbour[j]]);
-                    } else {
-                        penalScore = neighbourCost + (10 * frequencies[neighbour[j]][neighbour[i]]);
-                    }
-                    if(penalScore < currentCost) {
-                        std::cout << "PENAL HIT" << std::endl;
-                        delete currentPath;
-                        currentPath = PeaUtils::copyArray(n, neighbour);
-                        currentCost = neighbourCost;
-                        v1 = std::min(neighbour[i], neighbour[j]);
-                        v2 = std::max(neighbour[i], neighbour[j]);
-
+                        v1 = i;
+                        v2 = j;
                     }
                 }
                 PeaUtils::swap(j, i, neighbour);
@@ -69,22 +51,31 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
             bestPath = PeaUtils::copyArray(n, currentPath);
             bestCost = currentCost;
             std::cout << "HIT: " << bestCost << std::endl;
-            tabu[v1][v2] = iter + tabuListSize;
-            tabu[v2][v1] = iter + tabuListSize;
-            frequencies[v1][v2]++;
+            tabu[v1][v2] = tabuListSize;
+            tabu[v2][v1] = tabuListSize;
             unsatisfiedRuns = 0;
         } else {
             unsatisfiedRuns++;
         }
 
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (tabu[i][j] != 0) {
+                    tabu[i][j]--;
+                }
+            }
+        }
+
+
         if (unsatisfiedRuns == maxLoopsWithoutProgress) {
-//            std::cout << "SHUFLE" << std::endl;
             delete currentPath;
             currentPath = PeaUtils::generateRandomPath(n);
             currentCost = matrix->calculateCost(currentPath);
             unsatisfiedRuns = 0;
             tabu = PeaUtils::generateEmptyMatrix(n);
         }
-        iter++;
+
+            iter++;
     }
 }

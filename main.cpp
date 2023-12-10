@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
         stream << result->getCost() << " " << timeCause << endl;
 
     }
-    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv55.atsp");
-//    cout << SimulatedAnnealing::solve(matrix, 0, 0.5, 1, 0.999)->toString() << endl;
+    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv170.atsp");
+//    cout << SimulatedAnnealing::solve(matrix, 6, 0.5, 0.5, 0.995)->toString() << endl;
     TabuSearch::solve(matrix, 100);
 
 }

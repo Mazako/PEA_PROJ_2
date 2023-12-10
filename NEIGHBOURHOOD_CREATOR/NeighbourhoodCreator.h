@@ -9,7 +9,7 @@ class NeighbourhoodCreator {
 public:
     static int* randomTwoOptSwap(int n, int* array);
     static int* randomTwoSwap(int n, int* array);
-    static int * twoOptSwap(int n, int v2, int v1, int *array);
+    static void twoOptSwap(int n, int v2, int v1, int **arrayPtr);
 };
 
 

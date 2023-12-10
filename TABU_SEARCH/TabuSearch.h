@@ -5,7 +5,10 @@
 #include "TspMatrix.h"
 
 class TabuSearch {
+private:
+    std::pair<int, int> leastUsedIndexes(int** array) {
 
+    }
 public:
     static ShortestPathResults *solve(TspMatrix* matrix, int limitInMinutes);
 };

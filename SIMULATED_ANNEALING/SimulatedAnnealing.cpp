@@ -44,7 +44,7 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
                     route = PeaUtils::copyArray(n, newRoute);
                     cost = newCost;
                     accepted++;
-//                    std::cout << "NAJLEPSZY KOSZT: " << cost << " TEMPERATURA: " << temperature << std::endl;
+                    std::cout << "NAJLEPSZY KOSZT: " << cost << " TEMPERATURA: " << temperature << std::endl;
 
                 }
             } else if (isAccepted((double) delta, temperature)) {
@@ -75,7 +75,7 @@ double SimulatedAnnealing::initialTemperature(int n, int *path, long long int co
         costs.push_back(std::abs(neighbourCost - cost));
     }
     double avg = PeaUtils::calculateAverage(costs);
-    return std::abs(avg / std::log(tau));
+    return -avg / std::log(tau);
 
 }
 

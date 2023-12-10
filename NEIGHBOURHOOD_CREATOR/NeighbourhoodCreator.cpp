@@ -39,7 +39,8 @@ int *NeighbourhoodCreator::randomTwoSwap(int n, int *array) {
     return newNeighbour;
 }
 
-int * NeighbourhoodCreator::twoOptSwap(int n, int v2, int v1, int *array) {
+void NeighbourhoodCreator::twoOptSwap(int n, int v2, int v1, int **arrayPtr) {
+    int* array = *arrayPtr;
     int* newNeighbour = new int[n];
     for (int i = 0; i <= v1; i++) {
         newNeighbour[i] = array[i];
@@ -52,7 +53,7 @@ int * NeighbourhoodCreator::twoOptSwap(int n, int v2, int v1, int *array) {
         newNeighbour[i] = array[i];
     }
     delete array;
-    return newNeighbour;
+    *arrayPtr = newNeighbour;
 }
 
 
