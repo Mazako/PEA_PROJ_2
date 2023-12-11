@@ -56,7 +56,7 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
             totalRuns++;
         }
         auto currentTime = std::chrono::high_resolution_clock::now();
-        if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() > limitInMinutes) {
+        if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() >= limitInMinutes) {
             cout << "TIME LIMIT EXCEEDED" << endl;
             return new ShortestPathResults(cost, n, route, 0, true);
         }

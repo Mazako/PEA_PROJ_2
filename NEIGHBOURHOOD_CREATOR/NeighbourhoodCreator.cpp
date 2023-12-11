@@ -56,5 +56,15 @@ void NeighbourhoodCreator::twoOptSwap(int n, int v2, int v1, int **arrayPtr) {
     *arrayPtr = newNeighbour;
 }
 
+void NeighbourhoodCreator::invert(int n, int v1, int v2, int *array) {
+    int i = std::min(v1, v2);
+    int j = std::max(v1, v2);
+    while (i < j) {
+        PeaUtils::swap(i, j, array);
+        i++;
+        j--;
+    }
+}
+
 
 NeighbourhoodCreator::NeighbourhoodCreator() = default;

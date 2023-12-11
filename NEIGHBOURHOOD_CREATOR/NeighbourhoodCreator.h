@@ -10,6 +10,7 @@ public:
     static int* randomTwoOptSwap(int n, int* array);
     static int* randomTwoSwap(int n, int* array);
     static void twoOptSwap(int n, int v2, int v1, int **arrayPtr);
+    static void invert(int n, int v1, int v2, int* array);
 };
 
 

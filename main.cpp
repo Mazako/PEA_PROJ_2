@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
     }
     auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv170.atsp");
-//    cout << SimulatedAnnealing::solve(matrix, 6, 0.5, 0.5, 0.995)->toString() << endl;
-    TabuSearch::solve(matrix, 100);
+//    cout << SimulatedAnnealing::solve(matrix, 4, 0.2, 0.5, 0.999)->toString() << endl;
+    TabuSearch::solve(matrix, 4);
 
 }
