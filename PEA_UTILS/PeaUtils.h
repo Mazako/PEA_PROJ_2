@@ -62,6 +62,8 @@ public:
 
     static std::string saveResultsToFile(int n, int *path, std::string matrixName, std::string methodPrefix);
 
+    static void saveLogsToFile(std::vector<std::string> logs, std::string fileName);
+
     static int* generateRandomPath(int N) {
         std::vector<int> path(N);
         for (int i = 0; i < N; ++i) {

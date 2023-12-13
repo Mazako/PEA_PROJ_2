@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TspMatrix.h"
 
 int TspMatrix::getN() const {

@@ -8,7 +8,7 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, in
                                        bool greedyStart) {
     std::cout << "TABU SEARCH: GREEDY COST - " << GreedyAlgorithm::solve(matrix)->getCost() << std::endl;
     int n = matrix->getN();
-
+    std::vector<std::string> logger;
     int *bestPath;
 
     if (greedyStart) {
@@ -70,9 +70,12 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, in
             delete bestPath;
             bestPath = PeaUtils::copyArray(n, currentPath);
             bestCost = currentCost;
+            auto time = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(time - start).count();
+            std::string message;
+            message.append(std::to_string(bestCost)).append(";").append(std::to_string(duration));
+            logger.emplace_back(message);
             if (verbose) {
-                auto time = std::chrono::high_resolution_clock::now();
-                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(time - start).count();
                 std::cout << bestCost << " TIME: " << duration << std::endl;
             }
             unsatisfiedRuns = 0;
@@ -123,6 +126,8 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, in
         }
 
     }
-    PeaUtils::saveResultsToFile(n, bestPath, matrix->getName(), "TS");
+    auto path = PeaUtils::saveResultsToFile(n, bestPath, matrix->getName(), "TS");
+    PeaUtils::saveLogsToFile(logger, path + "_LOGS");
+
     return new ShortestPathResults(bestCost, n, bestPath, limitInMinutes * 60, true);
 }

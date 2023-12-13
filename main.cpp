@@ -35,10 +35,13 @@ int main(int argc, char *argv[]) {
         stream.open("result.txt", ios::out);
         stream << result->getCost() << " " << timeCause << endl;
 
-    }
-//    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv170.atsp");
-//    cout << SimulatedAnnealing::solve(matrix, 4, 0.00001, 0.5,
-//                                      0.995, true, true)->toString() << endl;
+    } else {
+    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv170.atsp");
+//    cout << "XD" << endl;
+    cout << SimulatedAnnealing::solve(matrix, 2, 0.2, 0.5, 0.999, true, true);
 //    TabuSearch::solve(matrix, 1, 10000, true, true);
+//        0.995, true, true)->toString() << endl;
+
+    }
 
 }

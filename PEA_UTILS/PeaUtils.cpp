@@ -120,7 +120,6 @@ TspMatrix* PeaUtils::readMatrixFromAtspFile(const std::string& filename) {
     for (int i = 0; i < 3; i++) {
         getline(newFile, line);
     }
-
     stringstream dimensionStream(line);
     string dimensionStr;
     dimensionStream >> dimensionStr;
@@ -131,6 +130,9 @@ TspMatrix* PeaUtils::readMatrixFromAtspFile(const std::string& filename) {
         getline(newFile, line);
     }
     int **array = new int *[dimension];
+    for (int i = 0; i < dimension; i++) {
+        array[i] = new int[dimension];
+    }
     stringstream rowBuffer(line);
     string numberBuffer;
     int i = 0;
@@ -144,7 +146,6 @@ TspMatrix* PeaUtils::readMatrixFromAtspFile(const std::string& filename) {
             if (counter % dimension == 0) {
                 i++;
                 j = 0;
-                array[i] = new int[dimension];
             } else {
                 j++;
             }
@@ -152,7 +153,7 @@ TspMatrix* PeaUtils::readMatrixFromAtspFile(const std::string& filename) {
         getline(newFile, line);
         rowBuffer = stringstream(line);
     }
-
+    newFile.close();
     return new TspMatrix(dimension, array, name);
 }
 
@@ -311,6 +312,15 @@ std::string PeaUtils::saveResultsToFile(int n, int *path, std::string matrixName
     fileStream << path[0] << "\n";
     fileStream.close();
     return fileName;
+}
+
+void PeaUtils::saveLogsToFile(std::vector<std::string> logs, std::string fileName) {
+    std::fstream is;
+    is.open(fileName, std::ios::out);
+    for (auto &item: logs) {
+        is << item << std::endl;
+    }
+    is.close();
 }
 
 PeaUtils::PeaUtils() = default;

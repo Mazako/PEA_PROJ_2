@@ -13,6 +13,7 @@ SimulatedAnnealing::SimulatedAnnealing() = default;
 ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMinutes, double tau,
                                                double innerLoopFactor,
                                                double coolingFactor, bool verbose, bool greedyStart) {
+    std::vector<std::string> logger;
     cout << "Matrix name: " << matrix->getName() << endl;
     cout << "Limit: " << limitInMinutes << ", tau: " << tau << ", loopFactor: " << innerLoopFactor << ", coolingFactor: " << coolingFactor << endl;
     int n = matrix->getN();
@@ -38,9 +39,9 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
     std::cout << "T: " << temperature << std::endl;
     int maxInnerLoopRuns = (n * (n - 1)) / 2;
     maxInnerLoopRuns *= innerLoopFactor;
-    while (temperature > 0.0000001) {
+    bool running = true;
+    while (temperature > 0.0000001 && running) {
         int totalRuns = 0;
-        int accepted = 0;
         while (totalRuns < maxInnerLoopRuns) {
             auto neighbour = NeighbourhoodCreator::randomTwoSwap(n, newRoute);
             auto neighbourCost = matrix->calculateCost(neighbour);
@@ -53,10 +54,13 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
                     delete route;
                     route = PeaUtils::copyArray(n, newRoute);
                     cost = newCost;
-                    accepted++;
+                    auto current = std::chrono::high_resolution_clock::now();
+                    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(current - start).count();
+                    std::string message;
+                    message.append(std::to_string(cost)).append(";").append(std::to_string(temperature))
+                           .append(";").append(std::to_string(duration));
+                    logger.emplace_back(message);
                     if (verbose) {
-                        auto current = std::chrono::high_resolution_clock::now();
-                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(current - start).count();
                         std::cout << "BEST COST: " << cost << " T: " << temperature << " TIME: " << duration <<  std::endl;
                     }
 
@@ -70,20 +74,19 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
             totalRuns++;
         }
         auto currentTime = std::chrono::high_resolution_clock::now();
+        temperature *= coolingFactor;
         if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() >= limitInMinutes) {
             if (verbose) {
                 cout << "TIME LIMIT EXCEEDED" << endl;
             }
-            auto time = std::chrono::duration_cast<std::chrono::seconds>(currentTime - start).count();
-            cout << "T: " << temperature;
-            cout << "exp(-1/Tk) = " << std::exp(-1.0 / temperature);
-            return new ShortestPathResults(cost, n, route, time, true);
+            running = false;
+            logger.emplace_back("TIME LIMIT EXCEDED");
         }
-        temperature *= coolingFactor;
     }
     auto currentTime = std::chrono::high_resolution_clock::now();
     auto time = std::chrono::duration_cast<std::chrono::seconds>(currentTime - start).count();
-    PeaUtils::saveResultsToFile(n, route, matrix->getName(), "SA");
+    auto path = PeaUtils::saveResultsToFile(n, route, matrix->getName(), "SA");
+    PeaUtils::saveLogsToFile(logger, path + "_LOGS");
 
     cout << "T: " << temperature << std::endl;
     cout << "exp(-1/Tk) = " << std::exp(-1.0 / temperature) << std::endl;
