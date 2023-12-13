@@ -44,7 +44,7 @@ public:
 
     static TspMatrix* readMatrixFromFile(const std::string& filename);
 
-    static TspMatrix* readMatrixFromAtspFile(const std::string& filename);
+    static TspMatrix * readMatrixFromAtspFile(const std::string& filename);
 
     static int factorial(int n);
 
@@ -59,6 +59,8 @@ public:
     static double calculateAverage(const std::vector<long long int> &vec);
 
     static int** generateEmptyMatrix(int n);
+
+    static std::string saveResultsToFile(int n, int *path, std::string matrixName, std::string methodPrefix);
 
     static int* generateRandomPath(int N) {
         std::vector<int> path(N);

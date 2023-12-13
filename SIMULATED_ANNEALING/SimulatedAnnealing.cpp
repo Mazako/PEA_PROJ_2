@@ -11,12 +11,22 @@ using std::endl;
 SimulatedAnnealing::SimulatedAnnealing() = default;
 
 ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMinutes, double tau,
-                                               double innerLoopFactor, double coolingFactor) {
+                                               double innerLoopFactor,
+                                               double coolingFactor, bool verbose, bool greedyStart) {
+    cout << "Matrix name: " << matrix->getName() << endl;
     cout << "Limit: " << limitInMinutes << ", tau: " << tau << ", loopFactor: " << innerLoopFactor << ", coolingFactor: " << coolingFactor << endl;
     int n = matrix->getN();
-    auto route = PeaUtils::generateRandomPath(n);
+    int* route;
+    if (greedyStart) {
+        auto greedy = GreedyAlgorithm::solve(matrix);
+        route = PeaUtils::copyArray(n, greedy->getPath());
+        delete greedy;
+    } else {
+        route = PeaUtils::generateRandomPath(n);
+    }
+
     auto cost = matrix->calculateCost(route);
-    cout << "GREEDY COST: " << GreedyAlgorithm::solve(matrix)->getCost();
+    cout << "GREEDY COST: " << GreedyAlgorithm::solve(matrix)->getCost() << endl;
     int* newRoute = PeaUtils::copyArray(n, route);
     long long newCost = cost;
 
@@ -44,7 +54,11 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
                     route = PeaUtils::copyArray(n, newRoute);
                     cost = newCost;
                     accepted++;
-                    std::cout << "NAJLEPSZY KOSZT: " << cost << " TEMPERATURA: " << temperature << std::endl;
+                    if (verbose) {
+                        auto current = std::chrono::high_resolution_clock::now();
+                        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(current - start).count();
+                        std::cout << "BEST COST: " << cost << " T: " << temperature << " TIME: " << duration <<  std::endl;
+                    }
 
                 }
             } else if (isAccepted((double) delta, temperature)) {
@@ -57,13 +71,23 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
         }
         auto currentTime = std::chrono::high_resolution_clock::now();
         if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() >= limitInMinutes) {
-            cout << "TIME LIMIT EXCEEDED" << endl;
-            return new ShortestPathResults(cost, n, route, 0, true);
+            if (verbose) {
+                cout << "TIME LIMIT EXCEEDED" << endl;
+            }
+            auto time = std::chrono::duration_cast<std::chrono::seconds>(currentTime - start).count();
+            cout << "T: " << temperature;
+            cout << "exp(-1/Tk) = " << std::exp(-1.0 / temperature);
+            return new ShortestPathResults(cost, n, route, time, true);
         }
         temperature *= coolingFactor;
     }
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    auto time = std::chrono::duration_cast<std::chrono::seconds>(currentTime - start).count();
+    PeaUtils::saveResultsToFile(n, route, matrix->getName(), "SA");
 
-    return new ShortestPathResults(cost, n, route, 0, false);
+    cout << "T: " << temperature << std::endl;
+    cout << "exp(-1/Tk) = " << std::exp(-1.0 / temperature) << std::endl;
+    return new ShortestPathResults(cost, n, route, time, false);
 }
 
 
@@ -83,9 +107,6 @@ bool SimulatedAnnealing::isAccepted(double delta, double temparature) {
     double exp1 = std::exp((-delta) / temparature);
     double rand = PeaUtils::randomFormalDouble();
     bool accepted = rand < exp1;
-    if (accepted) {
-//        cout << rand << " " << exp1 << endl;
-    }
     return accepted;
 }
 

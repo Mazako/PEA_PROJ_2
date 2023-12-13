@@ -4,11 +4,21 @@
 #include "GreedyAlgorithm.h"
 #include "NeighbourhoodCreator.h"
 
-ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
+ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, int maxLoopsWithoutProgress, bool verbose,
+                                       bool greedyStart) {
     std::cout << "TABU SEARCH: GREEDY COST - " << GreedyAlgorithm::solve(matrix)->getCost() << std::endl;
     int n = matrix->getN();
 
-    int *bestPath = PeaUtils::generateRandomPath(n);
+    int *bestPath;
+
+    if (greedyStart) {
+        auto greedy = GreedyAlgorithm::solve(matrix);
+        bestPath = PeaUtils::copyArray(n, greedy->getPath());
+        delete greedy;
+    } else {
+        bestPath = PeaUtils::generateRandomPath(n);
+    }
+
     long long bestCost = matrix->calculateCost(bestPath);
 
     int *currentPath = PeaUtils::copyArray(n, bestPath);
@@ -17,7 +27,6 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
     int *neighbour = nullptr;
     long long neighbourCost;
 
-    int maxLoopsWithoutProgress = 1000;
     int tabuListSize = sqrt(n);
 
     auto tabu = PeaUtils::generateEmptyMatrix(n);
@@ -28,7 +37,6 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
     auto start = std::chrono::high_resolution_clock::now();
     bool running = true;
     while (running) {
-        bool improvement = false;
         neighbour = PeaUtils::copyArray(n, currentPath);
         int *localBest = nullptr;
         long long localCost = INT64_MAX;
@@ -62,7 +70,11 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
             delete bestPath;
             bestPath = PeaUtils::copyArray(n, currentPath);
             bestCost = currentCost;
-            std::cout << "HIT: " << bestCost << "   " << matrix->calculateCost(bestPath) << std::endl;
+            if (verbose) {
+                auto time = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(time - start).count();
+                std::cout << bestCost << " TIME: " << duration << std::endl;
+            }
             unsatisfiedRuns = 0;
         } else {
             unsatisfiedRuns++;
@@ -104,10 +116,13 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes) {
         iter++;
         auto currentTime = std::chrono::high_resolution_clock::now();
         if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() >= limitInMinutes) {
-            std::cout << "TIME LIMIT EXCEEDED" << std::endl;
+            if (verbose) {
+                std::cout << "TIME LIMIT EXCEEDED" << std::endl;
+            }
             running = false;
         }
 
     }
-    return new ShortestPathResults(bestCost, n, bestPath, limitInMinutes, true);
+    PeaUtils::saveResultsToFile(n, bestPath, matrix->getName(), "TS");
+    return new ShortestPathResults(bestCost, n, bestPath, limitInMinutes * 60, true);
 }

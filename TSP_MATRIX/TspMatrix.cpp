@@ -15,9 +15,16 @@ TspMatrix::~TspMatrix() {
     delete[] this->matrix;
 }
 
-TspMatrix::TspMatrix(int n, int** matrix) {
+TspMatrix::TspMatrix(int n, int **matrix) {
     this->n = n;
     this->matrix = matrix;
+    this->name = "NONE";
+}
+
+TspMatrix::TspMatrix(int n, int** matrix, std::string name) {
+    this->n = n;
+    this->matrix = matrix;
+    this->name = name;
 }
 
 long long int TspMatrix::calculateCost(const int* path) {
@@ -45,4 +52,8 @@ unsigned long long TspMatrix::calculateCostThatExcludeZero(const int* path) {
         v1 = v2;
     }
     return totalCost;
+}
+
+std::string TspMatrix::getName() const {
+    return name;
 }

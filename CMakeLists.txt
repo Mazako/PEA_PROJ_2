@@ -7,19 +7,17 @@ include_directories(PEA_UTILS
         SHORTEST_PATH_RESULTS
         TSP_MATRIX
         TSP_MATRIX_SET
-        SHORTEST_PATH_RESULTS/MULTIPLE_SHORTEST_PATH_MULTIPLE_RESULTS
         GREEDY_ALGORITHM
         SIMULATED_ANNEALING
         NEIGHBOURHOOD_CREATOR
-        TABU_SEARCH)
+        TABU_SEARCH
+        MENU)
 
 add_executable(PEA_PROJ_2 main.cpp
         PEA_UTILS/PeaUtils.cpp
         PEA_UTILS/PeaUtils.h
         SHORTEST_PATH_RESULTS/ShortestPathResults.h
         SHORTEST_PATH_RESULTS/ShortestPathResults.cpp
-        SHORTEST_PATH_RESULTS/MULTIPLE_SHORTEST_PATH_MULTIPLE_RESULTS/MultipleShortestPathResults.cpp
-        SHORTEST_PATH_RESULTS/MULTIPLE_SHORTEST_PATH_MULTIPLE_RESULTS/MultipleShortestPathResults.h
         TSP_MATRIX/TspMatrix.cpp
         TSP_MATRIX/TspMatrix.h
         TSP_MATRIX_SET/RandomTspMatrixSet.cpp
@@ -32,4 +30,5 @@ add_executable(PEA_PROJ_2 main.cpp
         SIMULATED_ANNEALING/SimulatedAnnealing.h
         TABU_SEARCH/TabuSearch.cpp
         TABU_SEARCH/TabuSearch.h
-)
+        MENU/Menu.cpp
+        MENU/Menu.h)

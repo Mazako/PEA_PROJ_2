@@ -6,11 +6,9 @@
 
 class TabuSearch {
 private:
-    std::pair<int, int> leastUsedIndexes(int** array) {
-
-    }
 public:
-    static ShortestPathResults *solve(TspMatrix* matrix, int limitInMinutes);
+    static ShortestPathResults *
+    solve(TspMatrix *matrix, int limitInMinutes, int maxLoopsWithoutProgress, bool verbose, bool greedyStart);
 };
 
 

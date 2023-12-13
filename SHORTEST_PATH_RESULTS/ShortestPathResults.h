@@ -7,10 +7,10 @@ class ShortestPathResults {
     unsigned long long int cost;
     int* path;
     int n;
-    long long nanoTime;
+    long long secondsTime;
 
 public:
-    ShortestPathResults(unsigned long long int cost, int n, int* path, long long nanoTime, bool noTimeCause);
+    ShortestPathResults(unsigned long long int cost, int n, int* path, long long secondsTime, bool noTimeCause);
 
     ~ShortestPathResults();
 
@@ -24,7 +24,7 @@ public:
 
     int getN() const;
 
-    long long int getNanoTime() const;
+    long long int getSecondsTime() const;
 };
 
 
