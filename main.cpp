@@ -36,11 +36,10 @@ int main(int argc, char *argv[]) {
         stream << result->getCost() << " " << timeCause << endl;
 
     } else {
-    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv170.atsp");
+    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/rbg358.atsp");
 //    cout << "XD" << endl;
-    cout << SimulatedAnnealing::solve(matrix, 2, 0.2, 0.5, 0.999, true, true);
-//    TabuSearch::solve(matrix, 1, 10000, true, true);
-//        0.995, true, true)->toString() << endl;
+//    cout << SimulatedAnnealing::solve(matrix, 2, 0.02, 0.5, 0.995, true, true);
+//    TabuSearch::solve(matrix, 6, 1000, true, false);
 
     }
 
