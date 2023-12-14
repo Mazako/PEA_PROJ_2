@@ -39,32 +39,4 @@ int *NeighbourhoodCreator::randomTwoSwap(int n, int *array) {
     return newNeighbour;
 }
 
-void NeighbourhoodCreator::twoOptSwap(int n, int v2, int v1, int **arrayPtr) {
-    int* array = *arrayPtr;
-    int* newNeighbour = new int[n];
-    for (int i = 0; i <= v1; i++) {
-        newNeighbour[i] = array[i];
-    }
-    for (int i = 0; i <= v2 - v1; i++) {
-        newNeighbour[v1 + 1 + i] = array[v2 - i];
-    }
-
-    for (int i = v1 + 1; i < n; i++) {
-        newNeighbour[i] = array[i];
-    }
-    delete array;
-    *arrayPtr = newNeighbour;
-}
-
-void NeighbourhoodCreator::invert(int n, int v1, int v2, int *array) {
-    int i = std::min(v1, v2);
-    int j = std::max(v1, v2);
-    while (i < j) {
-        PeaUtils::swap(i, j, array);
-        i++;
-        j--;
-    }
-}
-
-
 NeighbourhoodCreator::NeighbourhoodCreator() = default;
