@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include "pugixml.hpp"
 
 void PeaUtils::swap(int i, int j, int *array) {
     int tmp = array[j];
@@ -321,6 +322,56 @@ void PeaUtils::saveLogsToFile(std::vector<std::string> logs, std::string fileNam
         is << item << std::endl;
     }
     is.close();
+}
+
+TspMatrix *PeaUtils::readMatrixFromXmlFile(const std::string &filename) {
+    pugi::xml_document xml;
+    if (!xml.load_file(filename.c_str())) {
+        throw std::invalid_argument("Nie udalo sie wczytac pliku xml");
+    }
+    auto mainNode = xml.child("travellingSalesmanProblemInstance");
+    auto nameNode = mainNode.child("name");
+    std::string name = nameNode.child_value();
+    auto graph = mainNode.child("graph");
+    int instanceSize = std::distance(graph.begin(), graph.end());
+    int** matrix = new int*[instanceSize];
+    for (int i = 0; i < instanceSize; i++) {
+        matrix[i] = new int[instanceSize];
+    }
+    int i = 0;
+    for (const auto &vertex: graph.children()) {
+        int j = 0;
+        for (const auto &edge: vertex.children()) {
+            auto strValue = edge.attribute("cost").value();
+            int value = (int) std::stod(strValue);
+            matrix[i][j] = value;
+            j++;
+        }
+        i++;
+    }
+    return new TspMatrix(instanceSize, matrix, name);
+
+}
+
+long long PeaUtils::readPathAndCalculateCost(TspMatrix *matrix, std::string filename) {
+
+    std::string line;
+    std::fstream newFile;
+    newFile.open(filename, std::ios::in);
+    std::getline(newFile, line);
+    int size = std::stoi(line);
+    if (size != matrix->getN()) {
+        throw std::invalid_argument("Liczba wierzcholkow niezgodna z instancja");
+    }
+    int* path = new int [size];
+    for (int i = 0; i < size; i++) {
+        int value;
+        std::cin >> value;
+        path[i] = value;
+    }
+    auto cost =  matrix->calculateCost(path);
+    delete[] path;
+    return cost;
 }
 
 PeaUtils::PeaUtils() = default;

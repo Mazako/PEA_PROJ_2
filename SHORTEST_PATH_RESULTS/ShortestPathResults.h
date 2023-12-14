@@ -8,9 +8,11 @@ class ShortestPathResults {
     int* path;
     int n;
     long long secondsTime;
+    std::string resultsPath;
 
 public:
-    ShortestPathResults(unsigned long long int cost, int n, int* path, long long secondsTime, bool noTimeCause);
+    ShortestPathResults(unsigned long long int cost, int n, int* path,
+                        long long secondsTime, bool noTimeCause, std::string resultsPath);
 
     ~ShortestPathResults();
 
@@ -25,6 +27,8 @@ public:
     int getN() const;
 
     long long int getSecondsTime() const;
+
+    std::string getFilePath();
 };
 
 

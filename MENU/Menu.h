@@ -3,7 +3,7 @@
 #include "TspMatrix.h"
 
 class Menu {
-    int timeLimitInMinutes = 2;
+    int timeLimitInSeconds = 120;
     bool verbose = true;
     bool useGreedyStart = false;
     TspMatrix* currentMatrix = nullptr;
@@ -21,6 +21,7 @@ class Menu {
     void showAllSettings();
     void performTabuSearch();
     void performSimulatedAnnealing();
+    void readResultFileAndCalcPath();
 
 public:
     Menu();

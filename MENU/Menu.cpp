@@ -1,5 +1,7 @@
 #include "Menu.h"
 #include "PeaUtils.h"
+#include "TabuSearch.h"
+#include "SimulatedAnnealing.h"
 #include <iostream>
 
 using std::cout;
@@ -17,23 +19,26 @@ void Menu::init() {
         cout << "5) Pokaz wszystkie ustawienia" << endl;
         cout << "6) Wykonaj tabu search" << endl;
         cout << "7) Wykonaj simulated annealing" << endl;
+        cout << "8) Oblicz koszt drogi z pliku (dla aktualnej macierzy)" << endl;
         cout << "0) Zakoncz program" << endl;
         cout << "Wybierz opcje: ";
         std::getline(std::cin, option);
         if (option == "1") {
-
+            readMatrixFromFile();
         } else if (option == "2") {
-
+            setSaParams();
         } else if (option == "3") {
-
+            setTsParams();
         } else if (option == "4") {
-
+            setGlobalSettings();
         } else if (option == "5") {
-
+            showAllSettings();
         } else if (option == "6") {
-
+            performTabuSearch();
         } else if (option == "7") {
-
+            performSimulatedAnnealing();
+        } else if (option == "8") {
+            readResultFileAndCalcPath();
         } else if (option == "0") {
             program = false;
         } else {
@@ -44,11 +49,24 @@ void Menu::init() {
 
 void Menu::readMatrixFromFile() {
     std::string path;
-    cout << "Uwaga! Plik musi miec format .atsp, lub .xml" << endl;
+    std::string option;
+    cout << "1) Plik .atsp" << endl;
+    cout << "2) Plik .xml" << endl;
+    cout << "Wybierz opcje: ";
+    std::getline(cin, option);
+    if (option != "1" && option != "2") {
+        cout << "Nie ma takiej opcji.";
+        return;
+    }
     cout << "Podaj sciezke do pliku: ";
     std::getline(std::cin, path);
     try {
-        auto matrix = PeaUtils::readMatrixFromAtspFile(path);
+        TspMatrix* matrix;
+        if (option == "1") {
+            matrix = PeaUtils::readMatrixFromAtspFile(path);
+        } else {
+            matrix = PeaUtils::readMatrixFromXmlFile(path);
+        }
         this->currentMatrix = matrix;
     } catch (std::exception& e) {
         cout << "Problem z wczytaniem pliku" << endl;
@@ -110,7 +128,7 @@ void Menu::setGlobalSettings() {
     std::string option;
     while (running) {
         cout << "1) Wyswietlaj informacje o przebiegu algorytmu = " << verbose << endl;
-        cout << "2) Maksymalny czas wykonywania algorytmu w minutach = " << timeLimitInMinutes << endl;
+        cout << "2) Maksymalny czas wykonywania algorytmu w sekundach = " << timeLimitInSeconds << endl;
         cout << "3) Zaczynaj algorytm od rozwiazania zachlannego = " << useGreedyStart << endl;
         cout << "0) Powrot" << endl;
         cout << "Wybierz opcje aby zmienic parametr: ";
@@ -119,7 +137,7 @@ void Menu::setGlobalSettings() {
             verbose = !verbose;
         } else if (option == "2") {
             cout << "Podaj wartosc: ";
-            cin >> timeLimitInMinutes;
+            cin >> timeLimitInSeconds;
             getchar();
         } else if (option == "0") {
             running = false;
@@ -134,7 +152,7 @@ void Menu::setGlobalSettings() {
 
 void Menu::showAllSettings() {
     cout << "Wyswietlaj informacje o przebiegu algorytmu = " << verbose << endl;
-    cout << "Maksymalny czas wykonywania algorytmu w minutach = " << timeLimitInMinutes << endl;
+    cout << "Maksymalny czas wykonywania algorytmu w sekundach = " << timeLimitInSeconds << endl;
     cout << "Zaczynaj algorytm od rozwiazania zachlannego = " << useGreedyStart << endl;
     cout << "Wspolczynnik tau (SA) = " << tau << endl;
     cout << "Wspolczynnik wewnetrznej petli (SA) = " << innerLoopFactor << endl;
@@ -143,9 +161,31 @@ void Menu::showAllSettings() {
 }
 
 void Menu::performTabuSearch() {
-
+    auto results = TabuSearch::solve(currentMatrix, timeLimitInSeconds, unsatisfiedIterationsBeforeReset, verbose, useGreedyStart);
+    cout << results->toString() << endl;
+    cout << "Zapisano sciezke rozwiazania w pliku: " << results->getFilePath() << endl;
+    delete results;
 }
 
 void Menu::performSimulatedAnnealing() {
+    auto results = SimulatedAnnealing::solve(currentMatrix, timeLimitInSeconds, tau, innerLoopFactor, coolingFactor, verbose, useGreedyStart);
+    cout << results->toString() << endl;
+    cout << "Zapisano sciezke rozwiazania w pliku: " << results->getFilePath() << endl;
+    delete results;
+}
+
+void Menu::readResultFileAndCalcPath() {
+    std::string path;
+    std::string option;
+    cout << "Podaj sciezke do pliku: ";
+    std::getline(std::cin, path);
+    try {
+        auto result = PeaUtils::readPathAndCalculateCost(currentMatrix, path);
+        cout << "Wynik: " << result << endl;
+    } catch (std::exception& e) {
+        cout << "Problem z wczytaniem pliku" << endl;
+    }
 
 }
+
+Menu::Menu() = default;

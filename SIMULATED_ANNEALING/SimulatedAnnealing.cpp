@@ -10,12 +10,12 @@ using std::endl;
 
 SimulatedAnnealing::SimulatedAnnealing() = default;
 
-ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMinutes, double tau,
+ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInSeconds, double tau,
                                                double innerLoopFactor,
                                                double coolingFactor, bool verbose, bool greedyStart) {
     std::vector<std::string> logger;
     cout << "Matrix name: " << matrix->getName() << endl;
-    cout << "Limit: " << limitInMinutes << ", tau: " << tau << ", loopFactor: " << innerLoopFactor << ", coolingFactor: " << coolingFactor << endl;
+    cout << "Limit: " << limitInSeconds << ", tau: " << tau << ", loopFactor: " << innerLoopFactor << ", coolingFactor: " << coolingFactor << endl;
     int n = matrix->getN();
     int* route;
     if (greedyStart) {
@@ -75,7 +75,7 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
         }
         auto currentTime = std::chrono::high_resolution_clock::now();
         temperature *= coolingFactor;
-        if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() >= limitInMinutes) {
+        if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - start).count() >= limitInSeconds) {
             if (verbose) {
                 cout << "TIME LIMIT EXCEEDED" << endl;
             }
@@ -87,10 +87,10 @@ ShortestPathResults *SimulatedAnnealing::solve(TspMatrix *matrix, int limitInMin
     auto time = std::chrono::duration_cast<std::chrono::seconds>(currentTime - start).count();
     auto path = PeaUtils::saveResultsToFile(n, route, matrix->getName(), "SA");
     PeaUtils::saveLogsToFile(logger, path + "_LOGS");
-
+    delete[] newRoute;
     cout << "T: " << temperature << std::endl;
     cout << "exp(-1/Tk) = " << std::exp(-1.0 / temperature) << std::endl;
-    return new ShortestPathResults(cost, n, route, time, false);
+    return new ShortestPathResults(cost, n, route, time, false, path);
 }
 
 

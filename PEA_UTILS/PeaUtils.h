@@ -46,6 +46,8 @@ public:
 
     static TspMatrix * readMatrixFromAtspFile(const std::string& filename);
 
+    static TspMatrix* readMatrixFromXmlFile(const std::string& filename);
+
     static int factorial(int n);
 
     static long double calculateAvgTime(int resultCount, ShortestPathResults** results);
@@ -63,6 +65,8 @@ public:
     static std::string saveResultsToFile(int n, int *path, std::string matrixName, std::string methodPrefix);
 
     static void saveLogsToFile(std::vector<std::string> logs, std::string fileName);
+
+    static long long readPathAndCalculateCost(TspMatrix* matrix, std::string filename);
 
     static int* generateRandomPath(int N) {
         std::vector<int> path(N);

@@ -8,7 +8,7 @@ class TabuSearch {
 private:
 public:
     static ShortestPathResults *
-    solve(TspMatrix *matrix, int limitInMinutes, int maxLoopsWithoutProgress, bool verbose, bool greedyStart);
+    solve(TspMatrix *matrix, int limitInSeconds, int maxLoopsWithoutProgress, bool verbose, bool greedyStart);
 };
 
 

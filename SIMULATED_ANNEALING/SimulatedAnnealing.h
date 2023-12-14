@@ -10,7 +10,7 @@ class SimulatedAnnealing {
     static bool isAccepted(double delta, double temparature);
 public:
     static ShortestPathResults *
-    solve(TspMatrix *matrix, int limitInMinutes, double tau, double innerLoopFactor,
+    solve(TspMatrix *matrix, int limitInSeconds, double tau, double innerLoopFactor,
           double coolingFactor, bool verbose, bool greedyStart);
 
 };

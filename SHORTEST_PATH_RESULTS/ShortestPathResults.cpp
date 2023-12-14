@@ -1,8 +1,8 @@
 #include "ShortestPathResults.h"
 
 ShortestPathResults::ShortestPathResults(unsigned long long int cost, int n, int* path,
-                                         long long secondsTime, bool noTimeCause) : cost(cost), path(path), n(n), secondsTime(secondsTime),
-                                                                                 noTimeCause(noTimeCause) {
+                                         long long secondsTime, bool noTimeCause, std::string resultPath) : cost(cost), path(path), n(n), secondsTime(secondsTime),
+                                                                                 noTimeCause(noTimeCause), resultsPath(resultPath) {
 }
 
 ShortestPathResults::~ShortestPathResults() {
@@ -17,7 +17,7 @@ std::string ShortestPathResults::toString() {
     for (int i = 0; i < n; i++) {
         str.append(std::to_string(path[i])).append(", ");
     }
-    str.append("\tczas: ").append(std::to_string((double) secondsTime / 1000000)).append(" ms.");
+    str.append("\tczas: ").append(std::to_string((double) secondsTime / 1000000)).append(" s.");
     return str;
 }
 
@@ -39,4 +39,8 @@ int ShortestPathResults::getN() const {
 
 long long int ShortestPathResults::getSecondsTime() const {
     return secondsTime;
+}
+
+std::string ShortestPathResults::getFilePath() {
+    return resultsPath;
 }

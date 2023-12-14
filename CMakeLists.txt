@@ -11,7 +11,9 @@ include_directories(PEA_UTILS
         SIMULATED_ANNEALING
         NEIGHBOURHOOD_CREATOR
         TABU_SEARCH
-        MENU)
+        MENU
+        pugixml-1.14/src)
+
 
 add_executable(PEA_PROJ_2 main.cpp
         PEA_UTILS/PeaUtils.cpp
@@ -31,4 +33,5 @@ add_executable(PEA_PROJ_2 main.cpp
         TABU_SEARCH/TabuSearch.cpp
         TABU_SEARCH/TabuSearch.h
         MENU/Menu.cpp
-        MENU/Menu.h)
+        MENU/Menu.h
+        pugixml-1.14/src/pugixml.cpp)

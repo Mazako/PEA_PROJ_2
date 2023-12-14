@@ -4,7 +4,7 @@
 #include "GreedyAlgorithm.h"
 #include "NeighbourhoodCreator.h"
 
-ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, int maxLoopsWithoutProgress, bool verbose,
+ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInSeconds, int maxLoopsWithoutProgress, bool verbose,
                                        bool greedyStart) {
     std::cout << "TABU SEARCH: GREEDY COST - " << GreedyAlgorithm::solve(matrix)->getCost() << std::endl;
     int n = matrix->getN();
@@ -25,6 +25,8 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, in
     long long currentCost = bestCost;
 
     int *neighbour = nullptr;
+    int* localBest = nullptr;
+
     long long neighbourCost;
 
     int tabuListSize = sqrt(n);
@@ -38,7 +40,7 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, in
     bool running = true;
     while (running) {
         neighbour = PeaUtils::copyArray(n, currentPath);
-        int *localBest = nullptr;
+        localBest = nullptr;
         long long localCost = INT64_MAX;
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
@@ -118,7 +120,7 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, in
 
         iter++;
         auto currentTime = std::chrono::high_resolution_clock::now();
-        if (std::chrono::duration_cast<std::chrono::minutes>(currentTime - start).count() >= limitInMinutes) {
+        if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - start).count() >= limitInSeconds) {
             if (verbose) {
                 std::cout << "TIME LIMIT EXCEEDED" << std::endl;
             }
@@ -126,8 +128,15 @@ ShortestPathResults *TabuSearch::solve(TspMatrix *matrix, int limitInMinutes, in
         }
 
     }
+    for (int i = 0; i < n; i++) {
+        delete[] tabu[i];
+    }
+    delete tabu;
+    delete currentPath;
+    delete neighbour;
+    delete localBest;
     auto path = PeaUtils::saveResultsToFile(n, bestPath, matrix->getName(), "TS");
     PeaUtils::saveLogsToFile(logger, path + "_LOGS");
 
-    return new ShortestPathResults(bestCost, n, bestPath, limitInMinutes * 60, true);
+    return new ShortestPathResults(bestCost, n, bestPath, limitInSeconds, true, path);
 }

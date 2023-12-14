@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
         } else if (method == "TS") {
             int loops = stoi(argv[5]);
             result = TabuSearch::solve(matrix, limitInMinutes, loops, false, greedyStart);
+        } else {
+            return -1;
         }
 
 
@@ -36,10 +38,9 @@ int main(int argc, char *argv[]) {
         stream << result->getCost() << " " << timeCause << endl;
 
     } else {
-    auto matrix = PeaUtils::readMatrixFromAtspFile("../RESOURCES/ftv170.atsp");
-//    cout << "XD" << endl;
-    cout << SimulatedAnnealing::solve(matrix, 2, 0.0000001, 0.5, 0.999, true, true);
-//    TabuSearch::solve(matrix, 6, 1000, true, false);
+    auto matrix = PeaUtils::readMatrixFromXmlFile("../RESOURCES/rbg358.xml");
+//    cout << SimulatedAnnealing::solve(matrix, 2, 0.0000001, 0.5, 0.999, true, true);
+    TabuSearch::solve(matrix, 6, 1000, true, true);
 
     }
 
