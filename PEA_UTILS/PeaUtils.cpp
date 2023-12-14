@@ -365,9 +365,8 @@ long long PeaUtils::readPathAndCalculateCost(TspMatrix *matrix, std::string file
     }
     int* path = new int [size];
     for (int i = 0; i < size; i++) {
-        int value;
-        std::cin >> value;
-        path[i] = value;
+        std::getline(newFile, line);
+        path[i] = std::stoi(line);
     }
     auto cost =  matrix->calculateCost(path);
     delete[] path;

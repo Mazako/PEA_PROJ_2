@@ -11,7 +11,13 @@ using std::endl;
 void Menu::init() {
     bool program = true;
     std::string option;
+    cout << "Pea, zadanie 2" << endl;
+    cout << "Autor: Michal Maziarz (263913)" << endl;
     while (program) {
+        for (int i = 0; i < 4; i++) {
+            cout << endl;
+        }
+        cout << "Macierz: " << (!currentMatrix ? "BRAK" : currentMatrix->getName()) << endl;
         cout << "1) Wczytaj macierz z pliku" << endl;
         cout << "2) Ustaw parametry SA" << endl;
         cout << "3) Ustaw parametry TS" << endl;
@@ -67,6 +73,7 @@ void Menu::readMatrixFromFile() {
         } else {
             matrix = PeaUtils::readMatrixFromXmlFile(path);
         }
+        delete this->currentMatrix;
         this->currentMatrix = matrix;
     } catch (std::exception& e) {
         cout << "Problem z wczytaniem pliku" << endl;
@@ -127,9 +134,10 @@ void Menu::setGlobalSettings() {
     bool running = true;
     std::string option;
     while (running) {
-        cout << "1) Wyswietlaj informacje o przebiegu algorytmu = " << verbose << endl;
+
+        cout << "1) Wyswietlaj informacje o przebiegu algorytmu = " << evaluateBool(verbose) << endl;
         cout << "2) Maksymalny czas wykonywania algorytmu w sekundach = " << timeLimitInSeconds << endl;
-        cout << "3) Zaczynaj algorytm od rozwiazania zachlannego = " << useGreedyStart << endl;
+        cout << "3) Zaczynaj algorytm od rozwiazania zachlannego = " << evaluateBool(useGreedyStart) << endl;
         cout << "0) Powrot" << endl;
         cout << "Wybierz opcje aby zmienic parametr: ";
         std::getline(std::cin, option);
@@ -151,9 +159,9 @@ void Menu::setGlobalSettings() {
 }
 
 void Menu::showAllSettings() {
-    cout << "Wyswietlaj informacje o przebiegu algorytmu = " << verbose << endl;
+    cout << "Wyswietlaj informacje o przebiegu algorytmu = " << evaluateBool(verbose) << endl;
     cout << "Maksymalny czas wykonywania algorytmu w sekundach = " << timeLimitInSeconds << endl;
-    cout << "Zaczynaj algorytm od rozwiazania zachlannego = " << useGreedyStart << endl;
+    cout << "Zaczynaj algorytm od rozwiazania zachlannego = " << evaluateBool(verbose) << endl;
     cout << "Wspolczynnik tau (SA) = " << tau << endl;
     cout << "Wspolczynnik wewnetrznej petli (SA) = " << innerLoopFactor << endl;
     cout << "Wspolczynnik wyzarzania (SA) = " << coolingFactor << endl;
@@ -161,6 +169,10 @@ void Menu::showAllSettings() {
 }
 
 void Menu::performTabuSearch() {
+    if (currentMatrix == nullptr) {
+        cout << "Wybierz macierz!" << endl;
+        return;
+    }
     auto results = TabuSearch::solve(currentMatrix, timeLimitInSeconds, unsatisfiedIterationsBeforeReset, verbose, useGreedyStart);
     cout << results->toString() << endl;
     cout << "Zapisano sciezke rozwiazania w pliku: " << results->getFilePath() << endl;
@@ -168,6 +180,10 @@ void Menu::performTabuSearch() {
 }
 
 void Menu::performSimulatedAnnealing() {
+    if (currentMatrix == nullptr) {
+        cout << "Wybierz macierz!" << endl;
+        return;
+    }
     auto results = SimulatedAnnealing::solve(currentMatrix, timeLimitInSeconds, tau, innerLoopFactor, coolingFactor, verbose, useGreedyStart);
     cout << results->toString() << endl;
     cout << "Zapisano sciezke rozwiazania w pliku: " << results->getFilePath() << endl;
@@ -175,6 +191,10 @@ void Menu::performSimulatedAnnealing() {
 }
 
 void Menu::readResultFileAndCalcPath() {
+    if (currentMatrix == nullptr) {
+        cout << "Wybierz macierz!" << endl;
+        return;
+    }
     std::string path;
     std::string option;
     cout << "Podaj sciezke do pliku: ";
@@ -186,6 +206,10 @@ void Menu::readResultFileAndCalcPath() {
         cout << "Problem z wczytaniem pliku" << endl;
     }
 
+}
+
+std::string Menu::evaluateBool(bool value) {
+    return value ? "Tak" : "Nie";
 }
 
 Menu::Menu() = default;

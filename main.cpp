@@ -5,7 +5,7 @@
 #include "NeighbourhoodCreator.h"
 #include "SimulatedAnnealing.h"
 #include "TabuSearch.h"
-
+#include "menu.h"
 using namespace std;
 
 void menu();
@@ -38,10 +38,15 @@ int main(int argc, char *argv[]) {
         stream << result->getCost() << " " << timeCause << endl;
 
     } else {
-    auto matrix = PeaUtils::readMatrixFromXmlFile("../RESOURCES/rbg358.xml");
+        menu();
+//    auto matrix = PeaUtils::readMatrixFromXmlFile("../RESOURCES/rbg358.xml");
 //    cout << SimulatedAnnealing::solve(matrix, 2, 0.0000001, 0.5, 0.999, true, true);
-    TabuSearch::solve(matrix, 6, 1000, true, true);
+//    TabuSearch::solve(matrix, 6, 1000, true, true);
 
     }
 
+}
+
+void menu() {
+    Menu().init();
 }

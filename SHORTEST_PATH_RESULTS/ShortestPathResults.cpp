@@ -17,7 +17,7 @@ std::string ShortestPathResults::toString() {
     for (int i = 0; i < n; i++) {
         str.append(std::to_string(path[i])).append(", ");
     }
-    str.append("\tczas: ").append(std::to_string((double) secondsTime / 1000000)).append(" s.");
+    str.append("\tczas: ").append(std::to_string(secondsTime)).append(" s.");
     return str;
 }
 

@@ -5,7 +5,7 @@
 class Menu {
     int timeLimitInSeconds = 120;
     bool verbose = true;
-    bool useGreedyStart = false;
+    bool useGreedyStart = true;
     TspMatrix* currentMatrix = nullptr;
     //SA PARAMS
     double tau = 0.2;
@@ -22,6 +22,7 @@ class Menu {
     void performTabuSearch();
     void performSimulatedAnnealing();
     void readResultFileAndCalcPath();
+    static std::string evaluateBool(bool value);
 
 public:
     Menu();
