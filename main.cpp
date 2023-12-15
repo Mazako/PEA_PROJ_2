@@ -5,7 +5,7 @@
 #include "NeighbourhoodCreator.h"
 #include "SimulatedAnnealing.h"
 #include "TabuSearch.h"
-#include "menu.h"
+#include "Menu.h"
 using namespace std;
 
 void menu();
